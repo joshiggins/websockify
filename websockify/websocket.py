@@ -539,6 +539,16 @@ class WebSocketRequestHandler(SimpleHTTPRequestHandler):
             else:
                 SimpleHTTPRequestHandler.do_GET(self)
 
+    def do_POST(self):
+        """Handle POST request. If web server is enabled,
+        SimpleHTTPRequestHandler.do_GET will be called."""
+        if self.only_upgrade:
+            self.send_error(405, "Method Not Allowed")
+        else:
+            # SimpleHTTPRequestHandler has no do_POST function, but we don't need
+            # anything special, just to respond in the same way as the GET
+            SimpleHTTPRequestHandler.do_GET(self)
+
     def list_directory(self, path):
         if self.file_only:
             self.send_error(404, "No such file")
